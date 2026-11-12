@@ -27,7 +27,7 @@ class GestorFJ:                                        # Clase encargada de admi
         self.__servicios = []                          # Lista vacía para almacenar objetos Servicio
         self.__reservas = []                           # Lista vacía para almacenar objetos Reserva
 
-    # ----------------- Propiedades de lectura (encapsulación) -----------------
+    # ----------------- encapsulación -----------------
     @property                                          # Permite leer gestor.clientes como un atributo
     def clientes(self):
         """Devuelve una copia de la lista de clientes registrados."""
