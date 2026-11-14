@@ -27,7 +27,7 @@ class GestorFJ:                                        # Clase encargada de admi
         self.__servicios = []                          # Lista vacía para almacenar objetos Servicio
         self.__reservas = []                           # Lista vacía para almacenar objetos Reserva
 
-    # ----------------- encapsulación -----------------
+    # ----------------- Encapsulación -----------------
     @property                                          # Permite leer gestor.clientes como un atributo
     def clientes(self):
         """Devuelve una copia de la lista de clientes registrados."""
@@ -43,14 +43,15 @@ class GestorFJ:                                        # Clase encargada de admi
         """Devuelve una copia de la lista de reservas creadas."""
         return list(self.__reservas)                   # Retornamos una copia de la lista de reservas
 
-# ----------------- Operaciones de gestión -----------------
+    # ----------------- Operaciones de gestión -----------------
     def registrar_cliente(self, cliente):              # Agrega un cliente válido a la lista interna
-        """valida que sea un cliente y lo guarda en la iista interna"""
-        if not isinstance(cliente, cliente)            # verificamos que el objeto objeto si sea de la clase cliente
-           error = TypeError("Se esperaba un objeto del tipo cliente.")   # Creamos el error
-           registrar_error(error, contexto="GestorFJ.registrar_cliente")   # Guardamos el error en el log
-           raise error                                 # Se envia el error para avisar que el dato no sirve
-        self._clientes.append(cliente)                 # Agregamos el cliente al final de la lista privada
+        """Valida que sea un Cliente y lo guarda en la lista interna."""
+        if not isinstance(cliente, Cliente):           # Verificamos que el objeto sí sea de la clase Cliente
+            error = TypeError("Se esperaba un objeto del tipo Cliente.")   # Creamos el error
+            registrar_error(error, contexto="GestorFJ.registrar_cliente")  # Guardamos el error en el log
+            raise error                                # Se envía el error para avisar que el dato no sirve
+
+        self.__clientes.append(cliente)                # Agregamos el cliente al final de la lista privada
         registrar_evento(f"GestorFJ: cliente '{cliente.nombre}' ({cliente.correo}) registrado.")  # Guardamos en el log
         return cliente                                 # Devolvemos el cliente registrado
 
@@ -66,7 +67,7 @@ class GestorFJ:                                        # Clase encargada de admi
                 or (texto_buscado is not None and cliente.nombre.lower() == texto_buscado)
             ):
                 return cliente                         # Si coincide, devolvemos el objeto Cliente encontrado
-         
+
         # Si termina el ciclo for y no encontró nada, preparamos la excepción FJ-102
         error = ClienteNoEncontradoError(              # Instanciamos el error personalizado (código FJ-102)
             f"No se encontró ningún cliente con el dato '{dato_busqueda}'."
@@ -79,35 +80,34 @@ class GestorFJ:                                        # Clase encargada de admi
         if not isinstance(servicio, Servicio):         # Verificamos que herede de la clase abstracta Servicio
             error = TypeError("Se esperaba un objeto de tipo Servicio.")  # Creamos el error
             registrar_error(error, contexto="GestorFJ.agregar_servicio")  # Guardamos el fallo en el log
-            raise error                                # Lanzamos el error        
+            raise error                                # Lanzamos el error
 
-        self._servicios.append(servicio)               # Agregamos el servicio de la lista 
+        self.__servicios.append(servicio)              # Agregamos el servicio a la lista
         registrar_evento(f"GestorFJ: servicio '{servicio.nombre}' agregado.")  # Dejamos constancia en el log
         return servicio                                # Devolvemos el servicio agregado
 
     def crear_reserva(self, dato_cliente, servicio, duracion):  # Une cliente buscado, servicio y duración
-        """Busca el cliente, crea la reserva y la guarda usando try/except/else/finally"""
-        try:                                           
+        """Busca el cliente, crea la reserva y la guarda usando try/except/else/finally."""
+        try:
             cliente = self.buscar_cliente(dato_cliente)  # Intentamos buscar el cliente y si no existe salta el error ClienteNoEncontradoError
             reserva = Reserva(cliente, servicio, duracion)  # Creamos la reserva con la clase de Ronaldo
-        except ClienteNoEncontradoError as error_cliente:  
+        except ClienteNoEncontradoError as error_cliente:
             # Conectamos el error FJ-102 dentro de ReservaInvalidaError (FJ-301)
             error_reserva = ReservaInvalidaError(
                 f"No se pudo crear la reserva: cliente '{dato_cliente}' no registrado."
             )
             registrar_error(error_cliente, contexto="GestorFJ.crear_reserva")  # Registramos la causa en el log
             raise error_reserva from error_cliente     # Lanzamos el error encadenado (raise ... from)
-        else:                                          # Este bloque funciona solo si NO hubo errores en el try
+        else:                                          # Este bloque funciona solo si no hubo errores en el try
             self.__reservas.append(reserva)            # Guardamos la reserva en la lista interna
             registrar_evento(f"GestorFJ: reserva #{reserva.id} guardada en la lista.")  # Registramos
             return reserva                             # Devolvemos la reserva creada
         finally:                                       # Este bloque siempre se ejecuta haya error o no
-            registrar_evento("GestorFJ: proceso de creación de reserva finalizado.")  # Cierre en el log 
-
+            registrar_evento("GestorFJ: proceso de creación de reserva finalizado.")  # Cierre en el log
 
 
 # ---------------------------------------------------------------------------
-# PRUEBA RÁPIDA (solo corre si ejecutas este archivo)
+# PRUEBA RÁPIDA (solo corre si ejecutas este archivo directamente)
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":                             # Solo se ejecuta si corres gestor.py directamente
     from servicios import ReservaSala                  # Importamos un servicio de prueba
@@ -123,5 +123,6 @@ if __name__ == "__main__":                             # Solo se ejecuta si corr
 
     try:                                               # Probamos buscar un cliente que no existe
         gestor_prueba.buscar_cliente("fantasma@mail.com")  # Debe lanzar ClienteNoEncontradoError (FJ-102)
-    except ClienteNoEncontradoError as err:            # Conseguimos el error esperado
+    except ClienteNoEncontradoError as err:            # Atrapamos el error esperado
         print("Error capturado correctamente:", err)   # Imprimimos el mensaje con código [FJ-102]
+
