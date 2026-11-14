@@ -167,6 +167,27 @@ def main():
         lambda: procesar_sin_confirmar(cliente, sala), # Procesar sin haber confirmado
         OperacionNoPermitidaError))                    # Esperamos este error
 
+    # --- Simulaciones del GestorFJ (listas internas y búsqueda de clientes) ---
+    gestor = GestorFJ()                                # Instanciamos el gestor de listas internas
+
+    def flujo_gestor_exitoso():                        # Función auxiliar para probar el flujo completo del gestor
+        gestor.registrar_cliente(cliente)              # Guardamos a Ana María Ruiz en la lista de clientes
+        gestor.agregar_servicio(sala)                  # Guardamos la sala en la lista de servicios
+        reserva_gestor = gestor.crear_reserva("ana@mail.com", sala, 2)  # Buscamos por correo y creamos reserva
+        reserva_gestor.confirmar()                     # Confirmamos la reserva creada desde el gestor
+        return f"{reserva_gestor.describir()} | Total reservas: {len(gestor.reservas)}"  # Resumen de salida
+
+    # 13. Uso completo de GestorFJ: registrar, buscar por correo y crear reserva.
+    resultados.append(ejecutar_simulacion(
+        13, "Gestión con listas internas: registrar cliente, servicio y crear reserva",
+        flujo_gestor_exitoso))                         # Ejecutamos la simulación exitosa del gestor
+
+    # 14. Buscar cliente inexistente en GestorFJ (activa excepción FJ-102).
+    resultados.append(ejecutar_simulacion(
+        14, "Rechazo de búsqueda de cliente no registrado en GestorFJ (FJ-102)",
+        lambda: gestor.buscar_cliente("noexiste@mail.com"),  # Buscamos un correo que no está en la lista
+        ClienteNoEncontradoError))                     # Esperamos específicamente el error FJ-102
+
     correctas = sum(resultados)                        # Contamos las simulaciones que dieron True
     print(f"\n=== RESUMEN: {correctas}/12 simulaciones correctas ===")  # Resumen final
     print(f"Archivo de registro: {RUTA_LOG}")          # Dónde quedó el log
