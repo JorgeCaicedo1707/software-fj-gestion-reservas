@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Software FJ - Fase 4: doce simulaciones de integración.
+"""Software FJ - Fase 4: catorce simulaciones de integración.
 
 Responsable del main.py: Miguel Ángel.
 Ejecutar desde la carpeta principal: python3 main.py
@@ -93,8 +93,8 @@ def cancelar_dos_veces(cliente, servicio):
 
 
 def main():
-    print("=== SOFTWARE FJ: 12 SIMULACIONES INTEGRADAS ===")  # Encabezado del programa
-    registrar_evento("Inicio de las 12 simulaciones integradas de main.py")  # Marca el inicio en el log
+    print("=== SOFTWARE FJ: 14 SIMULACIONES INTEGRADAS ===")  # Encabezado del programa
+    registrar_evento("Inicio de las 14 simulaciones integradas de main.py")  # Marca el inicio en el log
     resultados = []                                    # Aquí guardamos True/False de cada simulación
 
     # Objetos compartidos para las operaciones de reserva.
@@ -191,9 +191,9 @@ def main():
         ClienteNoEncontradoError))                     # Esperamos específicamente el error FJ-102
 
     correctas = sum(resultados)                        # Contamos las simulaciones que dieron True
-    print(f"\n=== RESUMEN: {correctas}/12 simulaciones correctas ===")  # Resumen final
+    print(f"\n=== RESUMEN: {correctas}/14 simulaciones correctas ===")  # Resumen final
     print(f"Archivo de registro: {RUTA_LOG}")          # Dónde quedó el log
-    registrar_evento(f"Fin de simulaciones integradas: {correctas}/12 correctas")  # Cierre en el log
+    registrar_evento(f"Fin de simulaciones integradas: {correctas}/14 correctas")  # Cierre en el log
 
 
 if __name__ == "__main__":                             # Solo corre si ejecutamos este archivo directamente
