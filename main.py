@@ -17,8 +17,10 @@ if RUTA_SRC not in sys.path:                           # Si src todavía no est�
 from cliente import Cliente                            # Clase Cliente (Jorge)
 from servicios import ReservaSala, AlquilerEquipo, Asesoria  # Los tres servicios (Ronaldo)
 from reserva import Reserva                            # Clase Reserva (Ronaldo)
+from gestor import GestorFJ                            # Gestor de listas internas (Angela Hoyos)
 from excepciones import (                              # Errores propios que esperamos en las simulaciones
     ClienteInvalidoError,                              # FJ-101: datos de cliente inválidos
+    ClienteNoEncontradoError,                          # FJ-102: cliente no encontrado en el gestor
     ServicioInvalidoError,                             # FJ-201: datos de servicio inválidos
     ReservaInvalidaError,                              # FJ-301: reserva con datos inválidos
     OperacionNoPermitidaError,                         # FJ-302: acción no permitida en ese estado
