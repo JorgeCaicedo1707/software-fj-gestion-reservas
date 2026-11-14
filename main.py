@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Software FJ - Fase 4: doce simulaciones de integración.
+"""Software FJ - Fase 4: catorce simulaciones de integración.
 
 Responsable del main.py: Miguel Ángel.
 Ejecutar desde la carpeta principal: python3 main.py
@@ -17,8 +17,10 @@ if RUTA_SRC not in sys.path:                           # Si src todavía no est�
 from cliente import Cliente                            # Clase Cliente (Jorge)
 from servicios import ReservaSala, AlquilerEquipo, Asesoria  # Los tres servicios (Ronaldo)
 from reserva import Reserva                            # Clase Reserva (Ronaldo)
+from gestor import GestorFJ                            # Gestor de listas internas (Angela Hoyos)
 from excepciones import (                              # Errores propios que esperamos en las simulaciones
     ClienteInvalidoError,                              # FJ-101: datos de cliente inválidos
+    ClienteNoEncontradoError,                          # FJ-102: cliente no encontrado en el gestor
     ServicioInvalidoError,                             # FJ-201: datos de servicio inválidos
     ReservaInvalidaError,                              # FJ-301: reserva con datos inválidos
     OperacionNoPermitidaError,                         # FJ-302: acción no permitida en ese estado
@@ -91,8 +93,8 @@ def cancelar_dos_veces(cliente, servicio):
 
 
 def main():
-    print("=== SOFTWARE FJ: 12 SIMULACIONES INTEGRADAS ===")  # Encabezado del programa
-    registrar_evento("Inicio de las 12 simulaciones integradas de main.py")  # Marca el inicio en el log
+    print("=== SOFTWARE FJ: 14 SIMULACIONES INTEGRADAS ===")  # Encabezado del programa
+    registrar_evento("Inicio de las 14 simulaciones integradas de main.py")  # Marca el inicio en el log
     resultados = []                                    # Aquí guardamos True/False de cada simulación
 
     # Objetos compartidos para las operaciones de reserva.
@@ -167,10 +169,31 @@ def main():
         lambda: procesar_sin_confirmar(cliente, sala), # Procesar sin haber confirmado
         OperacionNoPermitidaError))                    # Esperamos este error
 
+    # --- Simulaciones del GestorFJ (listas internas y búsqueda de clientes) ---
+    gestor = GestorFJ()                                # Instanciamos el gestor de listas internas
+
+    def flujo_gestor_exitoso():                        # Función auxiliar para probar el flujo completo del gestor
+        gestor.registrar_cliente(cliente)              # Guardamos a Ana María Ruiz en la lista de clientes
+        gestor.agregar_servicio(sala)                  # Guardamos la sala en la lista de servicios
+        reserva_gestor = gestor.crear_reserva("ana@mail.com", sala, 2)  # Buscamos por correo y creamos reserva
+        reserva_gestor.confirmar()                     # Confirmamos la reserva creada desde el gestor
+        return f"{reserva_gestor.describir()} | Total reservas: {len(gestor.reservas)}"  # Resumen de salida
+
+    # 13. Uso completo de GestorFJ: registrar, buscar por correo y crear reserva.
+    resultados.append(ejecutar_simulacion(
+        13, "Gestión con listas internas: registrar cliente, servicio y crear reserva",
+        flujo_gestor_exitoso))                         # Ejecutamos la simulación exitosa del gestor
+
+    # 14. Buscar cliente inexistente en GestorFJ (activa excepción FJ-102).
+    resultados.append(ejecutar_simulacion(
+        14, "Rechazo de búsqueda de cliente no registrado en GestorFJ (FJ-102)",
+        lambda: gestor.buscar_cliente("noexiste@mail.com"),  # Buscamos un correo que no está en la lista
+        ClienteNoEncontradoError))                     # Esperamos específicamente el error FJ-102
+
     correctas = sum(resultados)                        # Contamos las simulaciones que dieron True
-    print(f"\n=== RESUMEN: {correctas}/12 simulaciones correctas ===")  # Resumen final
+    print(f"\n=== RESUMEN: {correctas}/14 simulaciones correctas ===")  # Resumen final
     print(f"Archivo de registro: {RUTA_LOG}")          # Dónde quedó el log
-    registrar_evento(f"Fin de simulaciones integradas: {correctas}/12 correctas")  # Cierre en el log
+    registrar_evento(f"Fin de simulaciones integradas: {correctas}/14 correctas")  # Cierre en el log
 
 
 if __name__ == "__main__":                             # Solo corre si ejecutamos este archivo directamente
