@@ -8,17 +8,19 @@ Este proyecto corresponde a la Fase 4 del curso Programación (213023) de la UNA
 |---|---|---|
 | Jorge Leonardo Caicedo Reina | JorgeCaicedo1707 | Excepciones, entidad, cliente y logger |
 | Ronaldo Hoyoa Acevedo | Ronyhoyos30 | Servicios y reservas |
-| Miguel Ángel González Murillo | miguelgonzalezm16 | main.py con las 12 simulaciones |
+| Miguel Ángel González Murillo | miguelgonzalezm16 | main.py con las simulaciones 1 a 12 |
+| Ángela Ximena Hoyos Chocue | Angela-963 | Gestor de listas internas (gestor.py) y simulaciones 13 y 14 |
 | Todos | - | README e informe en PDF |
 
 ## Organización del proyecto
 
-- main.py: ejecuta las 12 simulaciones de integración (se ejecuta desde la carpeta principal).
+- main.py: ejecuta las 14 simulaciones de integración (se ejecuta desde la carpeta principal).
 - src/excepciones.py: errores propios de la aplicación.
 - src/entidad.py: clase base abstracta.
 - src/cliente.py: cliente y validación de sus datos.
 - src/servicios.py: clase Servicio y tipos de servicio.
 - src/reserva.py: creación y procesamiento de reservas.
+- src/gestor.py: clase GestorFJ con las listas internas de clientes, servicios y reservas.
 - src/logger.py: registro de eventos y errores.
 - logs/software_fj.log: registro que se crea al ejecutar la aplicación.
 
@@ -32,6 +34,7 @@ Desde la carpeta principal del repositorio se ejecuta el comando `python main.py
 - **Herencia y polimorfismo:** los clientes, servicios y reservas comparten la estructura general de `Entidad`, y cada tipo define su comportamiento particular.
 - **Encapsulación:** los datos se guardan como atributos privados y se revisan mediante propiedades.
 - **Excepciones:** los errores tienen clases propias y códigos para poder identificarlos. Las simulaciones muestran el uso de `try`, `except`, `else`, `finally` y el encadenamiento de errores con `raise ... from`.
+- **Listas internas:** `GestorFJ` guarda clientes, servicios y reservas en listas privadas, busca clientes por id, correo o nombre y lanza `ClienteNoEncontradoError` (FJ-102) cuando no existen.
 - **Registro:** las operaciones importantes, advertencias y errores se guardan en `logs/software_fj.log`.
 
 ## Códigos de error
@@ -48,4 +51,4 @@ Desde la carpeta principal del repositorio se ejecuta el comando `python main.py
 
 ## Trabajo en equipo
 
-Cada integrante trabajó en una rama propia (jorge-caicedo, Ronaldo-Hoyos y Miguel-Gonzalez). Los cambios se integraron a `main` mediante pull requests, con commits que indican qué se agregó o corrigió. Las tareas y su avance se organizaron mediante issues en GitHub.
+Cada integrante trabajó en una rama propia (jorge-caicedo, Ronaldo-Hoyos, Miguel-Gonzalez y Angela-Hoyos). Los cambios se integraron a `main` mediante pull requests (#1, #9, #10 y #11), con commits que indican qué se agregó o corrigió. Las tareas y su avance se organizaron mediante issues en GitHub.
